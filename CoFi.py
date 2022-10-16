@@ -14,6 +14,8 @@ money = 5000
 weekCount = 1
 health = 10
 hunger = 10
+energy = 10
+grades = 5
 
 window = 1
 mouseX, mouseY = pygame.mouse.get_pos()
@@ -23,8 +25,6 @@ WIDTH = 1200
 
 PERSON_HEIGHT = 100
 PERSON_WIDTH = 50
-
-PAYCHECK = 300
 
 # making window 1
 pygame.init()
@@ -103,12 +103,12 @@ while True: # main game loop
                 if(y > 450) or (y > 200 and x >= 500) or ((x == 950 or x == 500 or x == 550) and y > 0) or (x > 950 and y > 100):
                     y -= 50
             elif event.key == K_DOWN:
-                if (x < 550 and x > 450 and y < HEIGHT - 150) or (x < 450 and y > 400 and y < HEIGHT - 150) or (x == 1150 and y < 350) :
+                if (x < 600 and x > 450 and y < HEIGHT - 150) or (x < 450 and y > 400 and y < HEIGHT - 150) or (x == 1150 and y < 350) or (x == 950) :
                     y += 50
             elif event.key == K_e:
                 if(y == 200 and (x > 600 and x < 950) and window == 1):
                     window = 2
             elif event.key == K_ESCAPE and window == 2:
                 window = 1
-    pygame.display.update()
 
+    pygame.display.update()
