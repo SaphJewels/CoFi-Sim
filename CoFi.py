@@ -13,7 +13,6 @@ y = 300
 money = 5000
 weekCount = 1
 wage = 15
-tutorial = True
 
 #status variables
 health = 10
@@ -34,6 +33,10 @@ WIDTH = 1200
 
 PERSON_HEIGHT = 100
 PERSON_WIDTH = 50
+
+healthCare = False
+auto = False
+tuition = False
 
 # making window 1
 pygame.init()
@@ -131,6 +134,20 @@ def drawBackground2():
     billRect.center = (598, 259)
     DISPLAY.blit(billText, billRect)
 
+    #bills
+    if (tuition):
+        write(100, 100, "Tuition Paid", "black")
+    else:
+        write(100, 100, "Tuition - $100", "black")
+    if (healthCare):
+        write(100, 200, "Health Care Paid", "black")
+    else:
+        write(100, 200, "Health Care - $150", "black")
+    if (auto):
+        write(100, 300, "Auto Insurance Paid", "black")
+    else:
+        write(100, 300, "Auto Insurance - $90", "black")
+
 #draw square
 def squareStat(x, y, stat, color):
     for i in range (stat):
@@ -144,14 +161,6 @@ def write(x, y, words, color):
     DISPLAY.blit(text, textRect)
 
 def drawBackground3():
-    DISPLAY.fill((0, 0, 0))
-    drawScreen()
-
-def drawBackground4():
-    DISPLAY.fill((0, 0, 0))
-    drawScreen()
-
-def drawBackground5():
     DISPLAY.fill((0, 0, 0))
     drawScreen()
     
@@ -227,10 +236,6 @@ while True: # main game loop
         drawBackground2()
     elif (window == 3):
         drawBackground3()
-    elif (window == 4):
-        drawBackground4()
-    elif (window == 5):
-        drawBackground5()
 
     #week label
     text = bigStatus.render("Week " + str(weekCount), True, "black")
@@ -299,7 +304,12 @@ while True: # main game loop
                 energy = 10
                 health -= random.randint(1,3)
                 hunger -= random.randint(2,5)
-                            
+
+                #setting bills to false
+                healthCare = False
+                auto = False
+                tuition = False
+                                            
         elif (window == 2):
             #
             # CREATING BUTTONS -_-
@@ -308,11 +318,18 @@ while True: # main game loop
                 mouse = pygame.mouse.get_pos()
                 print(str(mouse[0]) + ' ' + str(mouse[1]))
                 if (383 <= mouse[0] and 453 >= mouse[0] and 174 <= mouse[1] and 244 >= mouse[1]): 
-                    window = 3
+                    money -= 100
+                    write(100, 325, "Paid Tuition - $100", "black")
+                    tuition = True
                 elif (473 <= mouse[0] and 543 >= mouse[0] and 174 <= mouse[1] and 244 >= mouse[1]):
-                    window = 4
+                    money -= 240
+                    write(100, 300, "Paid Health Care - $150", "black")
+                    write(100, 300, "Paid Auto Insurance - $90", "black")
+                    healthCare = True
+                    auto = True
                 elif (563 <= mouse[0] and 633 >= mouse[0] and 174 <= mouse[1] and 244 >= mouse[1]):
-                    window = 5
+                    window = 3
+                    
                     
     #making status bars
     squareStat(50, HEIGHT - 37, health, "red")
