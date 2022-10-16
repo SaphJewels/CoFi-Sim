@@ -88,16 +88,23 @@ while True: # main game loop
         if event.type == QUIT:
             pygame.quit()
         if event.type == KEYDOWN:
+            print(x, y)
             if event.key == K_LEFT:
-                print(x, y)
-                if (y < 200 and x > 100) or (y > 200 and y < 400 and x > 500) or (y > 400 and x > 400):
+                if(y == WIDTH - 75):
+                    x -= 25
+                elif(x > 500 and y >= 200) or (x >= 1000) or (x > 400 and y >= 450) or (x == 550) or (y < 100 and x < 550 and x > 300): 
                     x -= 50
             elif event.key == K_RIGHT:
-                x += 50
+                if(x == WIDTH - 100 and y > HEIGHT - 400 and y < HEIGHT - 100) or (x == WIDTH - 75 and y < 400):
+                    x+=25
+                elif(y > HEIGHT - 50 and x < WIDTH - 100) or (x == 500) or (y >= 200 and y < HEIGHT - 350 and x < WIDTH - 50) or (x < 550 and x >= 300 and y < 100) or (y >= HEIGHT - 350 and y < HEIGHT - 50 and x < WIDTH-100) or ( x > 900 and y >= 100 and x < WIDTH - 100):
+                    x += 50
             elif event.key == K_UP:
-                y -= 50
+                if(y > 450) or (y > 200 and x >= 500) or ((x == 950 or x == 500 or x == 550) and y > 0) or (x > 950 and y > 100):
+                    y -= 50
             elif event.key == K_DOWN:
-                y += 50
+                if (x < 550 and x > 450 and y < HEIGHT - 150) or (x < 450 and y > 400 and y < HEIGHT - 150) or (x == 1150 and y < 350) :
+                    y += 50
             elif event.key == K_e:
                 if(y == 200 and (x > 600 and x < 950) and window == 1):
                     window = 2
