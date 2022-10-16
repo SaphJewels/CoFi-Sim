@@ -2,7 +2,7 @@
 # 10/15/22
 # CoFi Sym - Technica 2022
 
-import pygame, random;
+import pygame, random, time;
 from pygame.locals import *
 
 pygame.init()
@@ -13,6 +13,7 @@ y = 300
 money = 5000
 weekCount = 1
 wage = 15
+tutorial = True
 
 #status variables
 health = 10
@@ -39,6 +40,17 @@ pygame.init()
 DISPLAY = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Cofi Sim")
 
+def drawScreen():
+    #drawing objectives window
+    pygame.draw.rect(DISPLAY, "white", (0, 0, 200, HEIGHT))
+
+    #drawing status display case
+    pygame.draw.rect(DISPLAY, "white", (0, HEIGHT - 50, WIDTH, 50))
+
+    #drawing screen (ref: 674 x 432)
+    screenImg = pygame.image.load('assets/screen2.png').convert()
+    DISPLAY.blit(screenImg, (200, 0))
+
 #making first background
 def drawBackground1():
     DISPLAY.fill((45, 20, 30))
@@ -51,35 +63,73 @@ def drawBackground1():
 
     #drawing bed
     pygame.draw.rect(DISPLAY, "green", (200, 0, 300, 450))
+    bedImg = pygame.image.load('assets/bed.png').convert()
+    DISPLAY.blit(bedImg, (200, 0))
 
     #drawing desk
-    pygame.draw.rect(DISPLAY, "red", (600, 0, 350, 200))
+    pygame.draw.rect(DISPLAY, (45, 20, 30), (600, 0, 350, 200))
+    deskImg = pygame.image.load('assets/final-desk.png').convert()
+    DISPLAY.blit(deskImg, (600, 0))
 
     #drawing chair
-    pygame.draw.rect(DISPLAY, "blue", (725, 200, 100, 100))
+    pygame.draw.rect(DISPLAY, (45, 20, 30), (725, 200, 100, 100))
+    chairImg = pygame.image.load('assets/chair.png')
+    DISPLAY.blit(chairImg, (725, 175))
 
     #drawing fridge
-    pygame.draw.rect(DISPLAY, "yellow", (200, 500, 200, 200))
+    pygame.draw.rect(DISPLAY, (45, 20, 30), (200, 500, 200, 200))
+    fridgeImg = pygame.image.load('assets/fridge.png')
+    DISPLAY.blit(fridgeImg, (200, 500))
 
     #drawing door
-    pygame.draw.rect(DISPLAY, "purple", (WIDTH - 25, HEIGHT - 300, 25,  200))
+    pygame.draw.rect(DISPLAY, (45, 20, 30), (WIDTH - 25, HEIGHT - 300, 25,  200))
 
     #drawing bookshelf
-    pygame.draw.rect(DISPLAY, "orange", (WIDTH - 200, 0, 200, 100))
+    pygame.draw.rect(DISPLAY, (45, 20, 30), (WIDTH - 200, 0, 200, 100))
+    bookshelfImg = pygame.image.load('assets/bookshelf.png').convert()
+    DISPLAY.blit(bookshelfImg, (WIDTH - 200, 0))
+
+    #drawing door
+    pygame.draw.rect(DISPLAY, (143, 86, 59), (WIDTH - 25, HEIGHT - 300, 25,  200))
 
 #making second background
 def drawBackground2():
     DISPLAY.fill((45, 20, 30))
 
-    #drawing objectives window
-    pygame.draw.rect(DISPLAY, "white", (0, 0, 200, HEIGHT))
+    #creating a font object
+    font = pygame.font.Font('fonts/Lato-Bold.ttf', 15)
 
-    #drawing status display case
-    pygame.draw.rect(DISPLAY, "white", (0, HEIGHT - 50, WIDTH, 50))
+    drawScreen()
 
-    #drawing computer screen
-    pygame.draw.rect(DISPLAY, "black", (200, 0, WIDTH - 200, HEIGHT - 25))
-    pygame.draw.rect(DISPLAY, "grey", (300, 100, WIDTH - 400, HEIGHT - 225))
+    #drawing bill app (apps are separated by 20 px)
+    billsAppImg = pygame.image.load('assets/billsApp.png').convert()
+    DISPLAY.blit(billsAppImg, (383, 174))
+
+    #implementing "Bills" text under bill app
+    billText = font.render('Bills', True, "white")
+    billRect = billText.get_rect()
+    billRect.center = (418, 259)
+    DISPLAY.blit(billText, billRect)
+    
+    #drawing insurance app (apps are separated by 20 px)
+    insuranceAppImg = pygame.image.load('assets/insuranceApp.png').convert()
+    DISPLAY.blit(insuranceAppImg, (473, 174))
+
+    #implementing "Insurance" text under bill app
+    billText = font.render('Insurance', True, "white")
+    billRect = billText.get_rect()
+    billRect.center = (508, 259)
+    DISPLAY.blit(billText, billRect)
+
+    #drawing stocks app (apps are separated by 20 px)
+    stocksAppImg = pygame.image.load('assets/stocksApp.png').convert()
+    DISPLAY.blit(stocksAppImg, (563, 174))
+
+    #implementing "Stocks" text under bill app
+    billText = font.render('Stocks', True, "white")
+    billRect = billText.get_rect()
+    billRect.center = (598, 259)
+    DISPLAY.blit(billText, billRect)
 
 #draw square
 def squareStat(x, y, stat, color):
@@ -93,16 +143,94 @@ def write(x, y, words, color):
     textRect.center = (x, y)
     DISPLAY.blit(text, textRect)
 
+def drawBackground3():
+    DISPLAY.fill((0, 0, 0))
+    drawScreen()
+
+def drawBackground4():
+    DISPLAY.fill((0, 0, 0))
+    drawScreen()
+
+def drawBackground5():
+    DISPLAY.fill((0, 0, 0))
+    drawScreen()
+    
+# fade to black, waits 2 seconds, fade back in
+def sleep():
+    fade = pygame.Surface((1200, 750))
+    fade.fill((0,0,0))
+    for alpha in range(300):
+        fade.set_alpha(alpha)
+        drawBackground1()
+        drawPerson(300, 50)
+        drawBlanket()
+        DISPLAY.blit(fade, (0,0))
+        pygame.display.update()
+        pygame.time.delay(5)
+    time.sleep(2)
+    for alpha in range(255):
+        fade.set_alpha(255 - alpha)
+        drawBackground1()
+        drawPerson(300, 50)
+        drawBlanket()
+        DISPLAY.blit(fade, (0,0))
+        pygame.display.update()
+        pygame.time.delay(5)
+    
+#drawing objectives
+def drawObjectives():
+    font = pygame.font.Font('fonts/Lato-Bold.ttf', 30)
+
+    #Title
+    objectivesText = font.render('Objectives', True, "black")
+    objectivesRect = objectivesText.get_rect()
+    objectivesRect.center = (100, 50)
+    DISPLAY.blit(objectivesText, objectivesRect)
+
+    #Task 1 - Study
+    font2 = pygame.font.Font('fonts/Lato-Regular.ttf', 15)
+    task1Text = font2.render('Study for 8 hours', True, 'black')
+    DISPLAY.blit(task1Text, (49, 80))
+    checkBox1 = pygame.image.load('assets/checkBox_unchecked.png')
+    DISPLAY.blit(checkBox1, (29, 82))
+
+    #Task 2 - Work
+    font2 = pygame.font.Font('fonts/Lato-Regular.ttf', 15)
+    task1Text = font2.render('Work', True, 'black')
+    DISPLAY.blit(task1Text, (49, 110))
+    checkBox2 = pygame.image.load('assets/checkBox_unchecked.png')
+    DISPLAY.blit(checkBox2, (29, 112))
+
+    #Task 3 - Bills
+    font2 = pygame.font.Font('fonts/Lato-Regular.ttf', 15)
+    task1Text = font2.render('Pay Bills on Computer', True, 'black')
+    DISPLAY.blit(task1Text, (49, 140))
+    checkBox3 = pygame.image.load('assets/checkBox_unchecked.png')
+    DISPLAY.blit(checkBox3, (29, 142))
+
 #making person
 def drawPerson(x, y):
     pygame.draw.rect(DISPLAY, (14, 50, 107), (x, y, PERSON_WIDTH, PERSON_HEIGHT))
+
+#drawing blanket
+def drawBlanket():
+    pygame.draw.rect(DISPLAY, "purple", (300, 354, 200, 96))
+    blanketImg = pygame.image.load('assets/blanket.png')
+    DISPLAY.blit(blanketImg, (200, 96))
 
 while True: # main game loop
     if(window == 1):
         drawBackground1()
         drawPerson(x, y)
+        drawBlanket()
     elif(window == 2):
         drawBackground2()
+    elif (window == 3):
+        drawBackground3()
+    elif (window == 4):
+        drawBackground4()
+    elif (window == 5):
+        drawBackground5()
 
     #week label
     text = bigStatus.render("Week " + str(weekCount), True, "black")
@@ -115,6 +243,10 @@ while True: # main game loop
             pygame.quit()
         if event.type == KEYDOWN:
             print(x, y)
+            if event.key == K_ESCAPE and window == 2:
+                    window = 1
+            elif event.key == K_ESCAPE and (window > 2 and window < 6):
+                    window = 2
             if event.key == K_LEFT:
                 if(x ==  WIDTH - 75):
                     x -= 25
@@ -154,9 +286,34 @@ while True: # main game loop
                     hunger -= 1
                     health -= 1
                     money += 5 * wage
-            elif event.key == K_ESCAPE and window == 2:
-                window = 1
 
+            #sleep
+            if(x == 300):
+                sleep()        
+                x = 550
+                y = 50
+                weekCount += 1
+
+                #randomizing two week situation
+                grades -= 1
+                energy = 10
+                health -= random.randint(1,3)
+                hunger -= random.randint(2,5)
+                            
+        elif (window == 2):
+            #
+            # CREATING BUTTONS -_-
+            #
+            if (event.type == pygame.MOUSEBUTTONDOWN):
+                mouse = pygame.mouse.get_pos()
+                print(str(mouse[0]) + ' ' + str(mouse[1]))
+                if (383 <= mouse[0] and 453 >= mouse[0] and 174 <= mouse[1] and 244 >= mouse[1]): 
+                    window = 3
+                elif (473 <= mouse[0] and 543 >= mouse[0] and 174 <= mouse[1] and 244 >= mouse[1]):
+                    window = 4
+                elif (563 <= mouse[0] and 633 >= mouse[0] and 174 <= mouse[1] and 244 >= mouse[1]):
+                    window = 5
+                    
     #making status bars
     squareStat(50, HEIGHT - 37, health, "red")
     squareStat(350, HEIGHT - 37, hunger, "brown")
