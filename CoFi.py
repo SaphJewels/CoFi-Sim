@@ -15,10 +15,10 @@ weekCount = 1
 wage = 15
 
 #status variables
-health = 10
-hunger = 10
-energy = 10
-grades = 5
+health = 1
+hunger = 1
+energy = 1
+grades = 1
 
 #text variables
 statusFont = pygame.font.Font('freesansbold.ttf', 15)
@@ -122,16 +122,6 @@ def drawBackground2():
     billText = font.render('Insurance', True, "white")
     billRect = billText.get_rect()
     billRect.center = (508, 259)
-    DISPLAY.blit(billText, billRect)
-
-    #drawing stocks app (apps are separated by 20 px)
-    stocksAppImg = pygame.image.load('assets/stocksApp.png').convert()
-    DISPLAY.blit(stocksAppImg, (563, 174))
-
-    #implementing "Stocks" text under bill app
-    billText = font.render('Stocks', True, "white")
-    billRect = billText.get_rect()
-    billRect.center = (598, 259)
     DISPLAY.blit(billText, billRect)
 
     #bills
@@ -302,8 +292,8 @@ while True: # main game loop
                 #randomizing two week situation
                 grades -= 1
                 energy = 10
-                health -= random.randint(1,3)
-                hunger -= random.randint(2,5)
+                health -= random.randint(1, health - 1)
+                hunger -= random.randint(2, hunger - 1)
 
                 #setting bills to false
                 healthCare = False
@@ -326,10 +316,7 @@ while True: # main game loop
                     write(100, 300, "Paid Health Care - $150", "black")
                     write(100, 300, "Paid Auto Insurance - $90", "black")
                     healthCare = True
-                    auto = True
-                elif (563 <= mouse[0] and 633 >= mouse[0] and 174 <= mouse[1] and 244 >= mouse[1]):
-                    window = 3
-                    
+                    auto = True                
                     
     #making status bars
     squareStat(50, HEIGHT - 37, health, "red")
@@ -381,5 +368,19 @@ while True: # main game loop
             advice = 4
         else:
             advice = 0
+
+        if(health == 0 or hunger == 0 or energy == 0):
+            DISPLAY.fill((0, 0, 0))
+            text = bigStatus.render("YOU DIED ", True, "white")
+            textRect = text.get_rect()
+            textRect.center = (600, 400)
+            DISPLAY.blit(text, textRect)
+        if(grades == 0):
+            DISPLAY.fill((0, 0, 0))
+            text = bigStatus.render("YOU FLUNKED OUT OF SCHOOL ", True, "white")
+            textRect = text.get_rect()
+            textRect.center = (600, 400)
+            DISPLAY.blit(text, textRect)
+
     
     pygame.display.update()
