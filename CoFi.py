@@ -13,9 +13,14 @@ y = 300
 money = 5000
 weekCount = 1
 health = 10
-hunger = 10
+hunger = 7
 energy = 10
 grades = 5
+
+statusFont = pygame.font.Font('freesansbold.ttf', 15)
+#text variables
+
+
 
 window = 1
 mouseX, mouseY = pygame.mouse.get_pos()
@@ -73,6 +78,17 @@ def drawBackground2():
     pygame.draw.rect(DISPLAY, "black", (200, 0, WIDTH - 200, HEIGHT - 25))
     pygame.draw.rect(DISPLAY, "grey", (300, 100, WIDTH - 400, HEIGHT - 225))
 
+#draw square
+def squareStat(x, y, stat, color):
+    for i in range (stat):
+        pygame.draw.rect(DISPLAY, color, (x + i * (25),  y,  25,  25))
+
+def write(x, y, words, color):
+    text = statusFont.render(words, True, color)
+    textRect = text.get_rect()
+    textRect.center = (x, y)
+    DISPLAY.blit(text, textRect)
+
 #making person
 def drawPerson(x, y):
     pygame.draw.rect(DISPLAY, (14, 50, 107), (x, y, PERSON_WIDTH, PERSON_HEIGHT))
@@ -103,12 +119,24 @@ while True: # main game loop
                 if(y > 450) or (y > 200 and x >= 500) or ((x == 950 or x == 500 or x == 550) and y > 0) or (x > 950 and y > 100):
                     y -= 50
             elif event.key == K_DOWN:
-                if (x < 600 and x > 450 and y < HEIGHT - 150) or (x < 450 and y > 400 and y < HEIGHT - 150) or (x == 1150 and y < 350) or (x == 950) :
+                if (x <= WIDTH - 75 and x > 450 and y < HEIGHT - 150) or (x < 450 and y > 400 and y < HEIGHT - 150) or (x == 1150 and y < 350) or (x == 950) :
                     y += 50
             elif event.key == K_e:
                 if(y == 200 and (x > 600 and x < 950) and window == 1):
                     window = 2
+                if(x == 400 and (y >= 500) and hunger < 10):
+                   hunger += 1
+                   money -= 5
             elif event.key == K_ESCAPE and window == 2:
                 window = 1
 
+    #making status bars
+    squareStat(50, HEIGHT - 37, health, "red")
+    squareStat(350, HEIGHT - 37, hunger, "brown")
+    squareStat(650, HEIGHT - 37, energy, "green")
+    squareStat(950, HEIGHT - 37, grades, "blue")
+    pygame.draw.rect(DISPLAY, "black", (1100, HEIGHT - 37, 80, 25))
+
+    write(1140, HEIGHT - 25, "$" + str(money), "white")
+    
     pygame.display.update()
